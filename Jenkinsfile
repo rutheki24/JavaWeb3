@@ -1,42 +1,30 @@
 pipeline {
     agent any
-
     environment {
-        PATH = "/usr/bin:$PATH"
-        DOCKERHUB_CREDENTIALS = credentials('Dockerhub')
+        DOCKER_HUB_CREDENTIALS = 'Dockerhub'
+        IMAGE_NAME = 'rutheki24/java-web-calculator'
     }
-
     stages {
-        stage('Debug PATH') {
+        stage('Checkout') {
             steps {
-                sh 'echo Current PATH: $PATH'
-                sh 'which docker'
-                sh 'docker --version || echo "Docker not found"'
+                git branch: 'new', url: 'https://github.com/rutheki24/JavaWeb3.git'
             }
         }
-
-        stage('Build') {
-            steps {
-                sh 'mvn clean package'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t ruth123/java-web-calculator .'
+                script {
+                    docker.build("${IMAGE_NAME}:latest")
+                }
             }
         }
-
         stage('Push to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'Dockerhub', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    sh '''
-                        echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-                        docker push ruth123/java-web-calculator
-                    '''
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_HUB_CREDENTIALS}") {
+                        docker.image("${IMAGE_NAME}:latest").push()
+                    }
                 }
             }
         }
     }
 }
-
