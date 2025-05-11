@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         PATH = "/usr/bin:$PATH"
-        DOCKERHUB_CREDENTIALS = credentials('ruth123')
+        DOCKERHUB_CREDENTIALS = credentials('Dockerhub')
     }
 
     stages {
@@ -29,7 +29,7 @@ pipeline {
 
         stage('Push to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'ruth123', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                withCredentials([usernamePassword(credentialsId: 'Dockerhub', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                     sh '''
                         echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
                         docker push ruth123/java-web-calculator
