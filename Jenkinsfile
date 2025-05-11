@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKER_HUB_CREDENTIALS = 'Dockerhub'
-        IMAGE_NAME = 'rutheki24/java-web-calculator'
+        IMAGE_NAME = 'ruthp123/java-web-calculator'
     }
     stages {
         stage('Checkout') {
