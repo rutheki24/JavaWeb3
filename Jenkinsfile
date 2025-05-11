@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'new', url: 'https://github.com/rutheki24/JavaWeb3.git'
+                git branch: 'latest', url: 'https://github.com/rutheki24/JavaWeb3.git'
             }
         }
         stage('Build Docker Image') {
